@@ -8,10 +8,10 @@ namespace Aplicacion.Interfaces
 {
     public interface IRepository<T>
     {
-        public void Guardar(T obj);
-        public List<T> Obtener();
-        public T ObtenerPorId(Guid Id);
-        public void Actualizar(T obj);
-        public void Eliminar(Guid Id);
+        public void Guardar(T entidad);
+        public IEnumerable<T> Obtener();
+        public T ObtenerPorId(Guid id);
+        public void Actualizar(T entidad);
+        public void Eliminar(Guid id);
     }
 }

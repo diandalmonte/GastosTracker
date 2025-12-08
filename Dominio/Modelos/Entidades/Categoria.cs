@@ -20,9 +20,11 @@ namespace Dominio.Modelos.Entidades
         [ForeignKey("UsuarioId")]
         public Usuario? Usuario { get; set; }//PORQUE porque null
 
-        public Categoria(string nombre, decimal montoPresupuesto, Guid usuarioId)
+        public Categoria(string nombre, Guid presupuestoId, Guid usuarioId)
         {
-
+            Nombre = nombre;
+            PresupuestoId = presupuestoId;
+            UsuarioId = usuarioId;
         }
 
         public bool IsPresupuestoExcedido(decimal montoGastos)

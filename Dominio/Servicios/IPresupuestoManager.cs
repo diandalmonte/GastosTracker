@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio.Modelos.Entidades;
-using Dominio.Modelos.ValueObjects;
 
 namespace Dominio.Servicios
 {
