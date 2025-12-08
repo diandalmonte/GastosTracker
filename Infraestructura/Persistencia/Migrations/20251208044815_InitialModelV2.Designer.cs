@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(GastosTrackerContext))]
-    [Migration("20251208004827_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251208044815_InitialModelV2")]
+    partial class InitialModelV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,10 @@ namespace Infraestructura.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");

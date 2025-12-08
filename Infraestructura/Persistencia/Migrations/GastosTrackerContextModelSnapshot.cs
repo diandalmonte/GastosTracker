@@ -146,6 +146,10 @@ namespace Infraestructura.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 

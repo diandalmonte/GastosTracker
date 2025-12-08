@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aplicacion.DTOs;
-using Aplicacion.Interfaces;
+using Aplicacion.Interfaces.Infraestructura;
 using Dominio.Modelos.Entidades;
 using Infraestructura.Persistencia.Contexto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructura.Persistencia.Repositorios
 {
-    public class CategoriaRepository : IFiltrableRepository<Categoria, CategoriaFilter>
+    public class CategoriaRepository : IFiltrableRepository<Categoria, string>
     {
         private readonly GastosTrackerContext _context;
         private readonly DbSet<Categoria> dbSet;
@@ -39,7 +39,7 @@ namespace Infraestructura.Persistencia.Repositorios
 
         public void Actualizar(Categoria categoria)
         {
-            dbSet.Entry(categoria).State = EntityState.Modified;
+            _context.Entry(categoria).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -49,9 +49,9 @@ namespace Infraestructura.Persistencia.Repositorios
             dbSet.Remove(categoria);
             _context.SaveChanges();
         }
-        public IEnumerable<Categoria> ObtenerPorFiltro(CategoriaFilter filtro)
+        public IEnumerable<Categoria> ObtenerPorFiltro(string filtro)
         {
-            throw new NotImplementedException();
+            return _context.Categorias.Where(c => c.Nombre.Contains(filtro, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
 }

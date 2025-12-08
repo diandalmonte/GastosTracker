@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aplicacion.DTOs
+namespace Aplicacion.DTOs.MetodoDePago
 {
-    public class CategoriaFilter
+    public class MetodoDePagoReadDTO
     {
     }
 }

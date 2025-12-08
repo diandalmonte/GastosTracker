@@ -10,6 +10,7 @@ namespace Dominio.Modelos.Entidades
     public class Usuario : EntidadBase
     {
         public string Nombre { get; set; }
+        public string Email { get; set; }
         public ICollection<Categoria> Categorias { get; set; } = [];
         public ICollection<MetodoDePago> MetodosDePago { get; set; } = [];
         public ICollection<Gasto> Gastos { get; set; } = [];

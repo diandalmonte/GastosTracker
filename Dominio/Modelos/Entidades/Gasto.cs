@@ -6,6 +6,7 @@ namespace Dominio.Modelos.Entidades
 {
     public class Gasto : EntidadBase //Does use of required make sense here?
     {
+        public string Encabezado { get; set; }
         public decimal Monto { get; private set; } //CAMBIAR: Validar que esto sea solo positivo
         public Guid CategoriaId { get; set; }
         [ForeignKey("CategoriaId")]
@@ -19,19 +20,20 @@ namespace Dominio.Modelos.Entidades
         [ForeignKey("UsuarioId")]
         public Usuario? Usuario { get; set; }
         public string? Descripcion { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateOnly Fecha { get; set; }
 
 
-        public Gasto(decimal monto, Guid categoriaId, Guid metodoDePagoId, Guid usuarioId, DateTime fecha, string? descripcion)
+        public Gasto(string encabezado, decimal monto, Guid categoriaId, Guid metodoDePagoId, Guid usuarioId, DateOnly fecha, string? descripcion)
         {
             SetMonto(monto);
 
-            this.Monto = monto;
-            this.CategoriaId = categoriaId;
-            this.MetodoDePagoId = metodoDePagoId;
-            this.UsuarioId = usuarioId;
-            this.Fecha = fecha;
-            this.Descripcion = descripcion;
+            Encabezado = encabezado;
+            Monto = monto;
+            CategoriaId = categoriaId;
+            MetodoDePagoId = metodoDePagoId;
+            UsuarioId = usuarioId;
+            Fecha = fecha;
+            Descripcion = descripcion;
         }
 
 
