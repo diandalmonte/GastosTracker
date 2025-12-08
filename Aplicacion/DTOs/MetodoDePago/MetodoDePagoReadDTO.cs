@@ -8,5 +8,8 @@ namespace Aplicacion.DTOs.MetodoDePago
 {
     public class MetodoDePagoReadDTO
     {
+        public Guid Id { get; set; }
+        public string TipoPago { get; set; }
+        public string Nombre { get; set; }
     }
 }

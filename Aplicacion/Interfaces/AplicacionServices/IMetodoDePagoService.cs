@@ -12,8 +12,8 @@ namespace Aplicacion.Interfaces.AplicacionServices
     public interface IMetodoDePagoService
     {
         public void Guardar(MetodoDePagoCreateDTO dto);
-        public IEnumerable<MetodoDePagoDTO> Obtener();
-        public MetodoDePagoDTO ObtenerPorId(Guid id);
+        public IEnumerable<MetodoDePagoReadDTO> Obtener();
+        public MetodoDePagoReadDTO ObtenerPorId(Guid id);
         public void Actualizar(MetodoDePagoCreateDTO dto);
         public void Eliminar(Guid id);
     }

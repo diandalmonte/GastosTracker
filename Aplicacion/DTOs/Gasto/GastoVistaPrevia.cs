@@ -10,6 +10,8 @@ namespace Aplicacion.DTOs.Gasto
     {
         public Guid Id { get; set; }
         public string Encabezado { get; set; }
+        public string NombreCategoria { get; set; }
+        public decimal Monto { get; set; }
 
     }
 }
