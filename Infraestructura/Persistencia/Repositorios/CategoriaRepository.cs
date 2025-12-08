@@ -11,47 +11,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructura.Persistencia.Repositorios
 {
-    public class CategoriaRepository : IFiltrableRepository<Categoria, string>
+    public class CategoriaRepository : Repository<Categoria>, IFiltrableRepository<Categoria, string>
     {
-        private readonly GastosTrackerContext _context;
-        private readonly DbSet<Categoria> dbSet;
+        public CategoriaRepository(GastosTrackerContext context) : base(context) { }
 
-        public CategoriaRepository(GastosTrackerContext context)
+        public async Task<IEnumerable<Categoria>> ObtenerPorFiltro(string filtro)
         {
-            _context = context;
-            dbSet = _context.Set<Categoria>();
-        }
+            var query = _dbSet.AsNoTracking().AsQueryable();
 
-        public void Guardar(Categoria categoria)
-        {
-            dbSet.Add(categoria);
-            _context.SaveChanges();
-        }
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                query = query.Where(c => c.Nombre.Contains(filtro));
+            }
 
-        public Categoria ObtenerPorId(Guid id)
-        {
-            return dbSet.Find(id);
-        }
-        public IEnumerable<Categoria> Obtener()
-        {
-            return dbSet.ToList();
-        }
-
-        public void Actualizar(Categoria categoria)
-        {
-            _context.Entry(categoria).State = EntityState.Modified;
-            _context.SaveChanges();
-        }
-
-        public void Eliminar(Guid id)
-        {
-            Categoria categoria = ObtenerPorId(id);
-            dbSet.Remove(categoria);
-            _context.SaveChanges();
-        }
-        public IEnumerable<Categoria> ObtenerPorFiltro(string filtro)
-        {
-            return _context.Categorias.Where(c => c.Nombre.Contains(filtro, StringComparison.OrdinalIgnoreCase)).ToList();
+            return await query.ToListAsync();
         }
     }
 }

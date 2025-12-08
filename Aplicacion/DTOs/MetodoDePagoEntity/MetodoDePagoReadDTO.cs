@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aplicacion.DTOs.MetodoDePago
+namespace Aplicacion.DTOs.MetodoDePagoEntity
 {
-    public class MetodoDePagoCreateDTO
+    public class MetodoDePagoReadDTO
     {
         public Guid Id { get; set; }
         public string TipoPago { get; set; }
         public string Nombre { get; set; }
-        public Guid UsuarioId { get; set; }
     }
 }

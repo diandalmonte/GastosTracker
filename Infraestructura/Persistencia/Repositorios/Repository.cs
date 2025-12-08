@@ -11,41 +11,45 @@ namespace Infraestructura.Persistencia.Repositorios
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly GastosTrackerContext _context;
-        private readonly DbSet<T> dbSet;
+        protected readonly GastosTrackerContext _context;
+        protected readonly DbSet<T> _dbSet;
 
         public Repository(GastosTrackerContext context)
         {
             _context = context;
-            dbSet = _context.Set<T>();
-        }
-        public void Guardar(T entidad)
-        {
-            dbSet.Add(entidad);
-            _context.SaveChanges();
+            _dbSet = _context.Set<T>();
         }
 
-        public IEnumerable<T> Obtener()
+        public async Task Guardar(T entidad)
         {
-            return dbSet.ToList();
+            await _dbSet.AddAsync(entidad);
+            await _context.SaveChangesAsync();
         }
 
-        public T ObtenerPorId(Guid id)
+        public async Task<IEnumerable<T>> Obtener()
         {
-            return dbSet.Find(id);
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
-        public void Actualizar(T entidad)
+        public async Task<T?> ObtenerPorId(Guid id)
         {
-            _context.Entry(entidad).State = EntityState.Modified;
-            _context.SaveChanges();
+            return await _dbSet.FindAsync(id);
         }
 
-        public void Eliminar(Guid id)
+        public async Task Actualizar(T entidad)
         {
-            var entidad = ObtenerPorId(id);
-            dbSet.Remove(entidad);
-            _context.SaveChanges();
+            _dbSet.Update(entidad); 
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Eliminar(Guid id)
+        {
+            var entidad = await ObtenerPorId(id);
+            if (entidad != null)
+            {
+                _dbSet.Remove(entidad);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

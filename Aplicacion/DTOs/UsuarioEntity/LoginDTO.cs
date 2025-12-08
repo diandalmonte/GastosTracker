@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aplicacion.DTOs.Usuario
+namespace Aplicacion.DTOs.UsuarioEntity
 {
-    public class UsuarioResponseDTO
+    public class LoginDTO
     {
-        public Guid Id { get; set; }
-        public string Nombre { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

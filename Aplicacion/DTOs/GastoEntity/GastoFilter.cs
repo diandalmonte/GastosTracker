@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dominio.Modelos.Entidades;
 
-namespace Aplicacion.DTOs.Gasto
+namespace Aplicacion.DTOs.GastoEntity
 {
     public class GastoFilter
     {

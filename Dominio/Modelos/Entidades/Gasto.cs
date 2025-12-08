@@ -36,8 +36,20 @@ namespace Dominio.Modelos.Entidades
             Descripcion = descripcion;
         }
 
+        public Gasto(string encabezado, decimal monto, Guid categoriaId, Guid metodoDePagoId, Guid usuarioId, string? descripcion)
+        {
+            SetMonto(monto);
 
-        private void SetMonto(decimal monto)
+            Encabezado = encabezado;
+            Monto = monto;
+            CategoriaId = categoriaId;
+            MetodoDePagoId = metodoDePagoId;
+            UsuarioId = usuarioId;
+            Descripcion = descripcion;
+        }
+
+
+        public void SetMonto(decimal monto)
         {
             if (monto <= 0)
             {

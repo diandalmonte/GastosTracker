@@ -21,14 +21,16 @@ namespace Aplicacion.Servicios
             _tokenService = tokenService;
         }
 
-        public string Login(string email, string password)
+        public async Task<string> Login(string email, string password)
         {
-            Usuario? usuario = _repo.ObtenerPorEmail(email);
+
+            Usuario? usuario = await _repo.ObtenerPorEmail(email);
 
             if (usuario == null)
             {
                 throw new InvalidLoginException("Email no encontrado. Verifica que todo este escrito correctamente");
             }
+
 
             if (!BCrypt.Net.BCrypt.Verify(password, usuario.PasswordHash))
                 throw new InvalidLoginException("Contraseña invalida");

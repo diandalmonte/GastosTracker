@@ -10,6 +10,6 @@ namespace Aplicacion.Interfaces.Infraestructura
 {
     public interface IUsuarioRepository
     {
-        public Usuario? ObtenerPorEmail(string email);
+        Task<Usuario?> ObtenerPorEmail(string email);
     }
 }
