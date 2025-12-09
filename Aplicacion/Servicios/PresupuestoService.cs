@@ -124,7 +124,7 @@ namespace Aplicacion.Servicios
         }
 
         //helper methods para no tener que repetir codigo, solo el metodo.
-        private async Task<decimal> ObtenerPresupuestoGeneral(Guid idUsuario)
+        private async Task<decimal> ObtenerPresupuestoGeneral(Guid idUsuario) //hacer public?
         {
             Usuario? usuario = await _repoUsuarios.ObtenerPorId(idUsuario);
             if (usuario == null)

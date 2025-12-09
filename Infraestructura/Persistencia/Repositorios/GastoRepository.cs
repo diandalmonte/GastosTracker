@@ -77,14 +77,14 @@ namespace Infraestructura.Persistencia.Repositorios
                                          (g.Descripcion != null && g.Descripcion.Contains(filtro.ContieneString)));
             }
 
-            if (filtro.fechaInicio.HasValue)
+            if (filtro.FechaInicio.HasValue)
             {
-                query = query.Where(g => g.Fecha >= filtro.fechaInicio.Value);
+                query = query.Where(g => g.Fecha >= filtro.FechaInicio.Value);
             }
 
-            if (filtro.fechaFin.HasValue)
+            if (filtro.FechaFin.HasValue)
             {
-                query = query.Where(g => g.Fecha <= filtro.fechaFin.Value);
+                query = query.Where(g => g.Fecha <= filtro.FechaFin.Value);
             }
 
             if (filtro.CategoriaId.HasValue)

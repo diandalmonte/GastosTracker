@@ -1,9 +1,10 @@
+using System.Text;
 using Aplicacion.DTOs;
 using Infraestructura.Persistencia.Contexto;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 namespace Presentación
 {
     public class Program
@@ -11,6 +12,10 @@ namespace Presentación
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            ExcelPackage.License.SetNonCommercialPersonal("Dian Delgado");
+
+
             builder.Services.AddDbContext<GastosTrackerContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection"));

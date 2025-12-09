@@ -10,7 +10,7 @@ namespace Aplicacion.DTOs.GastoEntity
     public class GastoCreateDTO
     {
         public string Encabezado { get; set; }
-        public decimal Monto { get; private set; } //CAMBIAR: Validar que esto sea solo positivo
+        public decimal Monto { get; set; } //CAMBIAR: Validar que esto sea solo positivo
         public Guid CategoriaId { get; set; }
         public Guid MetodoDePagoId { get; set; }
         public Guid UsuarioId { get; set; }
