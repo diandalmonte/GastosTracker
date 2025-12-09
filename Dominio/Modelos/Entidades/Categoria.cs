@@ -17,6 +17,8 @@ namespace Dominio.Modelos.Entidades
         [ForeignKey("UsuarioId")]
         public Usuario? Usuario { get; set; }//PORQUE porque null
 
+        public ICollection<Gasto> Gastos { get; set; } = new List<Gasto>();
+
         public Categoria(string nombre, decimal presupuesto, Guid usuarioId)
         {
             Nombre = nombre;
