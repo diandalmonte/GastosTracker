@@ -166,7 +166,7 @@ namespace Aplicacion.Servicios
         }
 
         //helper methods para no tener que repetir codigo, solo el metodo.
-        private async Task<decimal> ObtenerPresupuestoGeneral(Guid idUsuario) //hacer public?
+        public async Task<decimal> ObtenerPresupuestoGeneral(Guid idUsuario) //hacer public?
         {
             Usuario? usuario = await _repoUsuarios.ObtenerPorId(idUsuario);
             if (usuario == null)
@@ -177,6 +177,14 @@ namespace Aplicacion.Servicios
             {
                 return usuario.Presupuesto;
             }
+        }
+
+        public async Task<int> ObtenerPorcentajePresupuestoGeneral(Guid idUsuario)
+        {
+            decimal presupuestoGeneral = await ObtenerPresupuestoGeneral(idUsuario);
+            decimal totalgastos = presupuestoGeneral - await ObtenerDiferenciaGeneral(idUsuario);
+
+            return (int) ((totalgastos / presupuestoGeneral) * 100);
         }
 
     }
