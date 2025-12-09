@@ -91,13 +91,13 @@ namespace Infraestructura.Migrations
                         column: x => x.CategoriaId,
                         principalTable: "Categorias",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Gastos_MetodosDePago_MetodoDePagoId",
                         column: x => x.MetodoDePagoId,
                         principalTable: "MetodosDePago",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Gastos_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,

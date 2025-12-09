@@ -58,7 +58,7 @@ namespace Aplicacion.Servicios
 
         private string HashPassword(string password)
         {
-            return BCrypt.Net.BCrypt.HashPassword(password, 2);
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         public async Task<Guid> ObtenerIdPorEmail(string email)

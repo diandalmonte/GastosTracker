@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(GastosTrackerContext))]
-    [Migration("20251209185519_InitialCreateV2")]
+    [Migration("20251209190535_InitialCreateV2")]
     partial class InitialCreateV2
     {
         /// <inheritdoc />
@@ -162,15 +162,15 @@ namespace Infraestructura.Migrations
             modelBuilder.Entity("Dominio.Modelos.Entidades.Gasto", b =>
                 {
                     b.HasOne("Dominio.Modelos.Entidades.Categoria", "Categoria")
-                        .WithMany()
+                        .WithMany("Gastos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Dominio.Modelos.Entidades.MetodoDePago", "MetodoDePago")
-                        .WithMany()
+                        .WithMany("Gastos")
                         .HasForeignKey("MetodoDePagoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Dominio.Modelos.Entidades.Usuario", "Usuario")
@@ -195,6 +195,16 @@ namespace Infraestructura.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Dominio.Modelos.Entidades.Categoria", b =>
+                {
+                    b.Navigation("Gastos");
+                });
+
+            modelBuilder.Entity("Dominio.Modelos.Entidades.MetodoDePago", b =>
+                {
+                    b.Navigation("Gastos");
                 });
 
             modelBuilder.Entity("Dominio.Modelos.Entidades.Usuario", b =>
