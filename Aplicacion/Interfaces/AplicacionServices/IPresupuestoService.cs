@@ -10,9 +10,10 @@ namespace Aplicacion.Interfaces.AplicacionServices
 {
     public interface IPresupuestoService
     {
-        List<CategoriaReadDTO> ObtenerCategoriasExcedidas(Guid idUsuario);
-        string ProcesarGasto(Gasto gasto);
-        decimal ObtenerDiferencia(Guid idUsuario);
+        Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario);
+        Task<List<string>> ProcesarGasto(Gasto gasto);
+        Task<decimal> ObtenerDiferenciaGeneral(Guid idUsuario);
+        Task<decimal> ObtenerPorcentajeCategoria(Categoria categoria, Guid idUsuario);
 
     }
 }

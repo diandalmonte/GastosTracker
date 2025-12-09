@@ -12,7 +12,7 @@ namespace Aplicacion.DTOs.GastoEntity
         public string? ContieneString { get; set; }
         public Guid? CategoriaId { get; set; }
         public Guid? MetodoDePagoId { get; set; }
-        public DateOnly? fechaInicio { get; set; }
-        public DateOnly? fechaFin { get; set; }
+        public DateOnly? FechaInicio { get; set; }
+        public DateOnly? FechaFin { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace Dominio.Servicios
         {
             List<string> alertas = [];
 
-            CheckBudget(
+            CheckPresupuesto(
                 alertas,
                 montoGastoNuevo,
                 gastosEnCategoria,
@@ -27,7 +27,7 @@ namespace Dominio.Servicios
                 $"la categoría '{categoria.Nombre}'"
             );
 
-            CheckBudget(
+            CheckPresupuesto(
                 alertas,
                 montoGastoNuevo,
                 gastosGenerales,
@@ -39,7 +39,7 @@ namespace Dominio.Servicios
         }
 
         //Con este metodo me aseguro de no tener que repetir la misma logica dos veces, solo llamar al metodo dos veces
-        private void CheckBudget(List<string> alertas, decimal nuevoGasto, decimal gastadoActual, decimal limite, string nombreEntidad)
+        private void CheckPresupuesto(List<string> alertas, decimal nuevoGasto, decimal gastadoActual, decimal limite, string nombreEntidad)
         {
             if (limite == 0)
             {

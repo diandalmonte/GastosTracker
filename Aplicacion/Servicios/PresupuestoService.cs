@@ -8,7 +8,9 @@ using Aplicacion.DTOs.GastoEntity;
 using Aplicacion.Exceptions;
 using Aplicacion.Interfaces.AplicacionServices;
 using Aplicacion.Interfaces.Infraestructura;
+using Aplicacion.Utilidades;
 using Dominio.Modelos.Entidades;
+using Dominio.Servicios;
 
 namespace Aplicacion.Servicios
 {
@@ -17,37 +19,111 @@ namespace Aplicacion.Servicios
         private readonly IFiltrableRepository<Categoria, string> _repoCategoria;
         private readonly IFiltrableRepository<Gasto, GastoFilter> _repoGastos;
         private readonly IUsuarioRepository _repoUsuarios;
+        private readonly IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> _mapper;
+        private readonly IPresupuestoManager _presupuestoManager;
+        private readonly ICategoriaService _categoriaService;
 
 
         public PresupuestoService(IFiltrableRepository<Categoria, string> repoCategoria,
-            IFiltrableRepository<Gasto, GastoFilter> repoGastos)
+            IFiltrableRepository<Gasto, GastoFilter> repoGastos, IUsuarioRepository repoUsuarios, 
+            IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> mapper,
+            IPresupuestoManager presupuestoManager,
+            ICategoriaService categoriaService)
         {
             _repoCategoria = repoCategoria;
             _repoGastos = repoGastos;
+            _repoUsuarios = repoUsuarios;
+            _mapper = mapper;
+            _presupuestoManager = presupuestoManager;
+            _categoriaService = categoriaService;
         }
 
-        public async Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario)
+        public async Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario)//Bien
+        {
+            IEnumerable<CategoriaReadDTO> todasLasCategorias = await _categoriaService.Obtener(idUsuario);
+
+            //Filtramos las que esten excedidas
+            return todasLasCategorias
+                    .Where(c => c.IsExcedido)
+                    .ToList();
+        }
+
+        public async Task<decimal> ObtenerDiferenciaGeneral(Guid idUsuario)//Bien
         {
             decimal presupuestoGeneral = await ObtenerPresupuestoGeneral(idUsuario);
-            IEnumerable<Categoria> categorias = await _repoCategoria.Obtener(idUsuario);
 
-            foreach (Categoria categoria in categorias)
+            var (inicioMes, finMes) = DateExtensions.ObtenerRangoMesActual();
+
+            IEnumerable<Gasto> gastosMes = await _repoGastos.ObtenerPorFiltro(new GastoFilter
             {
-                IEnumerable<T> _repoGastos.ObtenerPorFiltro(new GastoFilter { CategoriaId = categoria.Id})
-            }
-        }
+                FechaInicio = inicioMes,
+                FechaFin = finMes,
+            }, idUsuario);
 
-        public decimal ObtenerDiferencia(Guid idUsuario)
+            decimal totalGastado = gastosMes.Sum(g => g.Monto);
+
+            return presupuestoGeneral - totalGastado;
+        }
+        public async Task<decimal> ObtenerPorcentajeCategoria(Categoria categoria, Guid idUsuario) //bien
         {
-            throw new NotImplementedException();
+            if (categoria.Presupuesto == 0) return 0;
+
+            var (inicioMes, finMes) = DateExtensions.ObtenerRangoMesActual();
+
+            IEnumerable<Gasto> gastosDeCategoria = await _repoGastos.ObtenerPorFiltro(new GastoFilter
+            {
+                FechaInicio = inicioMes,
+                FechaFin = finMes,
+                CategoriaId = categoria.Id
+            }, idUsuario);
+
+            decimal totalGastado = gastosDeCategoria.Sum(g => g.Monto);
+
+            return (totalGastado / categoria.Presupuesto) * 100;
         }
 
-        public string ProcesarGasto(Gasto gasto)
+        public async Task<List<string>> ProcesarGasto(Gasto gasto) //Bien
         {
-            throw new NotImplementedException();
+            var categoria = await _repoCategoria.ObtenerPorId(gasto.CategoriaId, gasto.UsuarioId);
+
+            if (categoria == null)
+                throw new ItemNotFoundException("La categoría del gasto no existe.");
+
+            decimal presupuestoGeneral = await ObtenerPresupuestoGeneral(gasto.UsuarioId);
+
+            //Se saca el rango basandose en la fecha del gasto:
+            var fechaGasto = gasto.Fecha;
+            var inicioMes = new DateOnly(fechaGasto.Year, fechaGasto.Month, 1);
+            var finMes = inicioMes.AddMonths(1).AddDays(-1);
+
+            var gastosCatList = await _repoGastos.ObtenerPorFiltro(new GastoFilter
+            {
+                FechaInicio = inicioMes,
+                FechaFin = finMes,
+                CategoriaId = categoria.Id
+            }, gasto.UsuarioId);
+ 
+            decimal acumuladoCategoria = gastosCatList.Sum(g => g.Monto);
+
+            var gastosGenList = await _repoGastos.ObtenerPorFiltro(new GastoFilter
+            {
+                FechaInicio = inicioMes,
+                FechaFin = finMes,
+            }, gasto.UsuarioId);
+            decimal acumuladoGeneral = gastosGenList.Sum(g => g.Monto);
+
+            // Se llama al PresupuestoMaanager para generar las alertas
+            return _presupuestoManager.ValidarPresupuesto(
+                categoria,
+                gasto.Monto,
+                categoria.Presupuesto,
+                acumuladoCategoria,
+                presupuestoGeneral,
+                acumuladoGeneral
+            );
         }
 
-        //helper method para no tener que repetir codigo, solo el metodo.
+        //helper methods para no tener que repetir codigo, solo el metodo.
         private async Task<decimal> ObtenerPresupuestoGeneral(Guid idUsuario)
         {
             Usuario? usuario = await _repoUsuarios.ObtenerPorId(idUsuario);
@@ -60,5 +136,6 @@ namespace Aplicacion.Servicios
                 return usuario.Presupuesto;
             }
         }
+
     }
 }
