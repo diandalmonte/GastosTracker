@@ -9,6 +9,7 @@ namespace Aplicacion.DTOs.GastoEntity
 {
     public class GastoCreateDTO
     {
+        public Guid? Id { get; set; }
         public string Encabezado { get; set; }
         public decimal Monto { get; set; } //CAMBIAR: Validar que esto sea solo positivo
         public Guid CategoriaId { get; set; }

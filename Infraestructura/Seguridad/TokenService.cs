@@ -7,9 +7,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Aplicacion.DTOs;
+using Aplicacion.Interfaces.Infraestructura;
+using Dominio.Modelos.Entidades;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Aplicacion.Interfaces.Infraestructura;
 
 namespace Infraestructura.Seguridad
 {
@@ -22,16 +23,19 @@ namespace Infraestructura.Seguridad
             _settings = settings.Value;
         }
 
-        public string GenerateToken(string email)
+        public string GenerateToken(Usuario usuario)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-            new Claim(JwtRegisteredClaimNames.Sub, email)
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Email)
+            };
+
 
             var token = new JwtSecurityToken(
                 issuer: _settings.Issuer,

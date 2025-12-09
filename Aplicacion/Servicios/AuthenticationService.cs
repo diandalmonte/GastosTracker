@@ -36,7 +36,7 @@ namespace Aplicacion.Servicios
                 throw new InvalidLoginException("Contraseña invalida");
 
 
-            return _tokenService.GenerateToken(email);
+            return _tokenService.GenerateToken(usuario);
         }
     }
 }

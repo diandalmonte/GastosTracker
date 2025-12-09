@@ -60,5 +60,15 @@ namespace Aplicacion.Servicios
         {
             return BCrypt.Net.BCrypt.HashPassword(password, 2);
         }
+
+        public async Task<Guid> ObtenerIdPorEmail(string email)
+        {
+            var usuario = await _repo.ObtenerPorEmail(email);
+            if (usuario == null)
+            {
+                throw new ItemNotFoundException($"Usuario con email {email} no encontrado.");
+            }
+            return usuario.Id;
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace Aplicacion.Interfaces.AplicacionServices
         public UsuarioResponseDTO ObtenerPorId(Guid id);
         public void Actualizar(UsuarioRequestDTO dto);
         public void Eliminar(Guid id);
+        Task<Guid> ObtenerIdPorEmail(string email);
     }
 }

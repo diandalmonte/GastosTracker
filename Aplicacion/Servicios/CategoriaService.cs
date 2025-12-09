@@ -29,11 +29,18 @@ namespace Aplicacion.Servicios
             _presupuestoService = presupuestoService;
         }
 
-        public void Guardar(CategoriaCreateDTO dto)
+        public async Task Guardar(CategoriaCreateDTO dto)
         {
-            // Validaciones de negocio podrían ir aquí antes de mapear
-            var entidad = _mapper.MapEntity(dto);
-            _repoCategoria.Guardar(entidad);
+            if (await _presupuestoService.ProcesarCreacionCategoria(dto))
+            {
+                var entidad = _mapper.MapEntity(dto);
+                await _repoCategoria.Guardar(entidad);
+            }
+            else
+            {
+                throw new OverBudgetException("El presupuesto para esta categoria se sale del Presupuesto Mensual");
+            }
+            
         }
 
         public async Task<IEnumerable<CategoriaReadDTO>> Obtener(Guid idUsuario)

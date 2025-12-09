@@ -15,6 +15,7 @@ namespace Aplicacion.Interfaces.AplicacionServices
         Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario);
         Task<List<string>> ProcesarGasto(GastoCreateDTO gasto);
         Task<decimal> ObtenerDiferenciaGeneral(Guid idUsuario);
+        Task<bool> ProcesarCreacionCategoria(CategoriaCreateDTO gasto);
 
     }
 }
