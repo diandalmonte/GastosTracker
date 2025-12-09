@@ -186,19 +186,20 @@ namespace Aplicacion.Servicios
 
         public async Task<bool> ProcesarCreacionCategoria(CategoriaCreateDTO categoria)
         {
-            if (categoria.Id != null)
+
+            decimal presupuesto = await ObtenerPresupuestoGeneral(categoria.UsuarioId);
+
+ 
+            decimal diferenciaDisponible = await ObtenerDiferenciaGeneral(categoria.UsuarioId);
+
+
+            if (categoria.MontoPresupuesto > diferenciaDisponible)
             {
-                Guid idValidado = (Guid) categoria.Id;
-                decimal presupuesto = await ObtenerPresupuestoGeneral(categoria.UsuarioId);
-                if (categoria.MontoPresupuesto > await ObtenerDiferenciaGeneral(idValidado))
-                {
-                    return false;
-                }
-                else { return true; }
+                return false;
             }
             else
             {
-                throw new ModelConstructionException("Id de Categoria no encontrado");
+                return true;
             }
         }
 

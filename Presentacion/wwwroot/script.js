@@ -156,6 +156,11 @@ const API = {
    UTILIDADES
    ========================================================================== */
 function getAuthHeaders() {
+
+    if (!state.token) {
+        console.warn("Peticion sin token.");
+    }
+
     return {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${state.token}`
@@ -163,7 +168,6 @@ function getAuthHeaders() {
 }
 
 function getAuthHeadersMultipart() {
-    // Para subir archivos NO definimos Content-Type, el navegador lo pone con el boundary
     return {
         'Authorization': `Bearer ${state.token}`
     };

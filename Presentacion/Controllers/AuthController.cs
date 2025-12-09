@@ -20,11 +20,11 @@ namespace Presentación.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginDTO dto)
+        public async Task<IActionResult> Login(LoginDTO dto)
         {
             try
             {
-                var token = _authService.Login(dto.Email, dto.Password);
+                var token = await _authService.Login(dto.Email, dto.Password);
                 return Ok(new { token });
             }
             catch (Exception e)
@@ -34,15 +34,14 @@ namespace Presentación.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UsuarioRequestDTO dto)
+        public async Task<IActionResult> Register(UsuarioRequestDTO dto)
         {
             try
             {
-                string password = dto.Password;
-                _usuarioService.Guardar(dto);
+                _usuarioService.Guardar(dto); // Guardar es síncrono según tu UsuarioService
 
-                // Login automático después del registro
-                var token = _authService.Login(dto.Email, password);
+                // Login es asíncrono, necesita await
+                var token = await _authService.Login(dto.Email, dto.Password);
                 return Ok(new { token });
             }
             catch (EmailAlreadyInUseException ex)
@@ -54,5 +53,6 @@ namespace Presentación.Controllers
                 return BadRequest(e.Message);
             }
         }
+
     }
 }
