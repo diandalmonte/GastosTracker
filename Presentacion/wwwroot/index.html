@@ -111,188 +111,207 @@
                 </div>
             </section>
 
-        <dialog id="modalDetalleGenerico" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3 id="tituloDetalleModal">Detalle del Ítem</h3>
-                    <button type="button" class="btnCerrarModal" aria-label="Cerrar">&times;</button>
-                </header>
+            <dialog id="modalDetalleGenerico" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3 id="tituloDetalleModal">Detalle del Ítem</h3>
+                        <button type="button" class="btnCerrarModal" aria-label="Cerrar">&times;</button>
+                    </header>
 
-                <div id="cuerpoDetalleModal">
+                    <div id="cuerpoDetalleModal">
+                    </div>
+
+                    <footer class="acciones-modal">
+                        <button type="button" id="btnActualizarDetalle">Actualizar</button>
+                        <button type="button" id="btnEliminarDetalle" class="boton-peligro">Eliminar</button>
+                    </footer>
                 </div>
+            </dialog>
 
-                <footer class="acciones-modal">
-                    <button type="button" id="btnActualizarDetalle">Actualizar</button>
-                    <button type="button" id="btnEliminarDetalle" class="boton-peligro">Eliminar</button>
-                </footer>
-            </div>
-        </dialog>
+            <dialog id="modalFormularioGasto" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3 id="tituloModalGasto">Registrar Gasto</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
+                    <form id="formularioGasto">
+                        <input type="hidden" id="gastoId">
 
-        <dialog id="modalFormularioGasto" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3 id="tituloModalGasto">Registrar Gasto</h3>
-                    <button type="button" class="btnCerrarModal">&times;</button>
-                </header>
-                <form id="formularioGasto">
-                    <input type="hidden" id="gastoId">
+                        <label for="gastoEncabezado">Encabezado:</label>
+                        <input type="text" id="gastoEncabezado" required>
 
-                    <label for="gastoEncabezado">Encabezado:</label>
-                    <input type="text" id="gastoEncabezado" required>
+                        <label for="gastoMonto">Monto:</label>
+                        <input type="number" id="gastoMonto" step="0.01" min="0.01" required>
 
-                    <label for="gastoMonto">Monto:</label>
-                    <input type="number" id="gastoMonto" step="0.01" min="0.01" required>
-
-                    <label for="gastoCategoria">Categoría:</label>
-                    <select id="gastoCategoria" required>
-                        <option value="">Seleccione...</option>
-                    </select>
-
-                    <label for="gastoMetodo">Método de Pago:</label>
-                    <select id="gastoMetodo" required>
-                        <option value="">Seleccione...</option>
-                    </select>
-
-                    <label for="gastoFecha">Fecha:</label>
-                    <input type="date" id="gastoFecha">
-
-                    <label for="gastoDescripcion">Descripción (Opcional):</label>
-                    <textarea id="gastoDescripcion"></textarea>
-
-                    <button type="submit">Guardar Gasto</button>
-                </form>
-            </div>
-        </dialog>
-
-        <dialog id="modalPerfil" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3>Mi Perfil</h3>
-                    <button type="button" class="btnCerrarModal">&times;</button>
-                </header>
-
-                <form id="formularioPerfil">
-                    <label for="perfilNombre">Nombre:</label>
-                    <input type="text" id="perfilNombre" required>
-
-                    <label for="perfilEmail">Correo Electrónico:</label>
-                    <input type="email" id="perfilEmail" readonly title="No se puede editar el email">
-
-                    <label for="perfilPassword">Nueva Contraseña (dejar en blanco si no cambia):</label>
-                    <input type="password" id="perfilPassword" placeholder="******">
-
-                    <div class="acciones-formulario">
-                        <button type="submit">Guardar Cambios</button>
-                    </div>
-                </form>
-            </div>
-        </dialog>
-
-        <dialog id="modalReportes" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3>Importar o Exportar Archivos</h3>
-                    <button type="button" class="btnCerrarModal">&times;</button>
-                </header>
-
-                <form id="formularioReportes">
-                    <label for="formatoReporte">Formato de Exportación:</label>
-                    <select id="formatoReporte" required>
-                        <option value="Excel">Excel (.xlsx)</option>
-                        <option value="Txt">Texto (.txt)</option>
-                        <option value="Json">JSON (.json)</option>
-                    </select>
-
-                    <div class="acciones-formulario">
-                        <button type="submit">Generar y Descargar</button>
-                    </div>
-                </form>
-
-                <hr>
-                <form id="formularioImportar">
-                    <label for="archivoImportar">Importar Gastos (Excel):</label>
-                    <input type="file" id="archivoImportar" accept=".xlsx">
-                    <button type="submit">Importar</button>
-                </form>
-            </div>
-        </dialog>
-
-        <dialog id="modalMetodosPago" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3>Métodos de Pago</h3>
-                    <button type="button" class="btnCerrarModal">&times;</button>
-                </header>
-
-                <section class="seccion-lista-metodos">
-                    <h4>Mis Métodos</h4>
-                    <ul id="listaMetodosPago">
-                    </ul>
-                </section>
-
-                <hr>
-
-                <section class="seccion-crear-metodo">
-                    <h4>Agregar Nuevo Método</h4>
-                    <form id="formularioMetodoPago">
-                        <input type="hidden" id="metodoId">
-
-                        <label for="metodoNombre">Nombre:</label>
-                        <input type="text" id="metodoNombre" placeholder="Ej. Tarjeta Gold" required>
-
-                        <label for="metodoTipo">Tipo:</label>
-                        <select id="metodoTipo" required>
-                            <option value="Efectivo">Efectivo</option>
-                            <option value="Tarjeta">Tarjeta</option>
-                            <option value="Transferencia">Transferencia</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="PagoDigital">Pago Digital</option>
+                        <label for="gastoCategoria">Categoría:</label>
+                        <select id="gastoCategoria" required>
+                            <option value="">Seleccione...</option>
                         </select>
 
-                        <button type="submit">Guardar Método</button>
+                        <label for="gastoMetodo">Método de Pago:</label>
+                        <select id="gastoMetodo" required>
+                            <option value="">Seleccione...</option>
+                        </select>
+
+                        <label for="gastoFecha">Fecha:</label>
+                        <input type="date" id="gastoFecha">
+
+                        <label for="gastoDescripcion">Descripción (Opcional):</label>
+                        <textarea id="gastoDescripcion"></textarea>
+
+                        <button type="submit">Guardar Gasto</button>
                     </form>
-                </section>
-            </div>
-        </dialog>
+                </div>
+            </dialog>
 
-        <dialog id="modalFiltros" class="modal hidden">
-            <div class="contenido-modal">
-                <header>
-                    <h3>Filtros de Búsqueda</h3>
-                    <button type="button" class="btnCerrarModal">&times;</button>
-                </header>
+            <dialog id="modalPerfil" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3>Mi Perfil</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
 
-                <form id="formularioFiltros">
-                    <label for="filtroBusqueda">Buscar texto:</label>
-                    <input type="text" id="filtroBusqueda" placeholder="En descripción o encabezado...">
+                    <form id="formularioPerfil">
+                        <label for="perfilNombre">Nombre:</label>
+                        <input type="text" id="perfilNombre" required>
 
-                    <fieldset>
-                        <legend>Rango de Fechas</legend>
-                        <label for="filtroFechaInicio">Desde:</label>
-                        <input type="date" id="filtroFechaInicio">
+                        <label for="perfilEmail">Correo Electrónico:</label>
+                        <input type="email" id="perfilEmail" readonly title="No se puede editar el email">
 
-                        <label for="filtroFechaFin">Hasta:</label>
-                        <input type="date" id="filtroFechaFin">
-                    </fieldset>
+                        <label for="perfilPassword">Nueva Contraseña (dejar en blanco si no cambia):</label>
+                        <input type="password" id="perfilPassword" placeholder="******">
 
-                    <label for="filtroCategoria">Categoría:</label>
-                    <select id="filtroCategoria">
-                        <option value="">Todas</option>
-                    </select>
+                        <div class="acciones-formulario">
+                            <button type="submit">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
 
-                    <label for="filtroMetodo">Método de Pago:</label>
-                    <select id="filtroMetodo">
-                        <option value="">Todos</option>
-                    </select>
+            <dialog id="modalReportes" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3>Importar o Exportar Archivos</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
 
-                    <div class="acciones-formulario">
-                        <button type="button" id="btnLimpiarFiltros">Limpiar Filtros</button>
-                        <button type="submit" id="btnAplicarFiltros">Aplicar Filtros</button>
-                    </div>
-                </form>
-            </div>
-        </dialog>
-    </main>
+                    <form id="formularioReportes">
+                        <label for="formatoReporte">Formato de Exportación:</label>
+                        <select id="formatoReporte" required>
+                            <option value="Excel">Excel (.xlsx)</option>
+                            <option value="Txt">Texto (.txt)</option>
+                            <option value="Json">JSON (.json)</option>
+                        </select>
+
+                        <div class="acciones-formulario">
+                            <button type="submit">Generar y Descargar</button>
+                        </div>
+                    </form>
+
+                    <hr>
+                    <form id="formularioImportar">
+                        <label for="archivoImportar">Importar Gastos (Excel):</label>
+                        <input type="file" id="archivoImportar" accept=".xlsx">
+                        <button type="submit">Importar</button>
+                    </form>
+                </div>
+            </dialog>
+
+            <dialog id="modalMetodosPago" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3>Métodos de Pago</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
+
+                    <section class="seccion-lista-metodos">
+                        <h4>Mis Métodos</h4>
+                        <ul id="listaMetodosPago">
+                        </ul>
+                    </section>
+
+                    <hr>
+
+                    <section class="seccion-crear-metodo">
+                        <h4>Agregar Nuevo Método</h4>
+                        <form id="formularioMetodoPago">
+                            <input type="hidden" id="metodoId">
+
+                            <label for="metodoNombre">Nombre:</label>
+                            <input type="text" id="metodoNombre" placeholder="Ej. Tarjeta Gold" required>
+
+                            <label for="metodoTipo">Tipo:</label>
+                            <select id="metodoTipo" required>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Tarjeta">Tarjeta</option>
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="PagoDigital">Pago Digital</option>
+                            </select>
+
+                            <button type="submit">Guardar Método</button>
+                        </form>
+                    </section>
+                </div>
+            </dialog>
+
+            <dialog id="modalFiltros" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3>Filtros de Búsqueda</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
+
+                    <form id="formularioFiltros">
+                        <label for="filtroBusqueda">Buscar texto:</label>
+                        <input type="text" id="filtroBusqueda" placeholder="En descripción o encabezado...">
+
+                        <fieldset>
+                            <legend>Rango de Fechas</legend>
+                            <label for="filtroFechaInicio">Desde:</label>
+                            <input type="date" id="filtroFechaInicio">
+
+                            <label for="filtroFechaFin">Hasta:</label>
+                            <input type="date" id="filtroFechaFin">
+                        </fieldset>
+
+                        <label for="filtroCategoria">Categoría:</label>
+                        <select id="filtroCategoria">
+                            <option value="">Todas</option>
+                        </select>
+
+                        <label for="filtroMetodo">Método de Pago:</label>
+                        <select id="filtroMetodo">
+                            <option value="">Todos</option>
+                        </select>
+
+                        <div class="acciones-formulario">
+                            <button type="button" id="btnLimpiarFiltros">Limpiar Filtros</button>
+                            <button type="submit" id="btnAplicarFiltros">Aplicar Filtros</button>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+            <dialog id="modalCategoria" class="modal hidden">
+                <div class="contenido-modal">
+                    <header>
+                        <h3 id="tituloModalCategoria">Nueva Categoría</h3>
+                        <button type="button" class="btnCerrarModal">&times;</button>
+                    </header>
+                    <form id="formularioCategoria">
+                        <input type="hidden" id="categoriaId"> <label for="catNombre">Nombre:</label>
+                        <input type="text" id="catNombre" required>
+
+                        <label for="catPresupuesto">Presupuesto Mensual:</label>
+                        <input type="number" id="catPresupuesto" step="0.01" min="0" required>
+
+                        <div class="acciones-formulario">
+                            <button type="submit">Guardar Categoría</button>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+</main>
 
     <script src="script.js"></script>
 </body>

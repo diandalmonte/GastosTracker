@@ -32,6 +32,13 @@ const elements = {
     toggleAuthMode: document.getElementById('toggleAuthMode'),
     btnCerrarSesion: document.getElementById('btnCerrarSesion'),
 
+
+    modalCategoria: document.getElementById('modalCategoria'),
+    formularioCategoria: document.getElementById('formularioCategoria'),
+    catNombre: document.getElementById('catNombre'),
+    catPresupuesto: document.getElementById('catPresupuesto'),
+    categoriaId: document.getElementById('categoriaId'),
+
     // Presupuesto (Sidebar)
     medidorPresupuesto: document.getElementById('medidorPresupuesto'),
     textoPorcentajePresupuesto: document.getElementById('textoPorcentajePresupuesto'),
@@ -201,7 +208,8 @@ function setupEventListeners() {
     elements.formularioGasto.addEventListener('submit', handleGastoSubmit);
 
     // Acciones de Categorías
-    elements.btnAgregarCategoria.addEventListener('click', handleCreateCategoria);
+    elements.btnAgregarCategoria.addEventListener('click', () => openCategoriaModal());
+    elements.formularioCategoria.addEventListener('submit', handleCategoriaSubmit);
 
     // Acciones de Detalle Genérico
     elements.btnActualizarDetalle.addEventListener('click', handleUpdateFromDetail);
@@ -551,34 +559,48 @@ function renderListaCategorias(categorias) {
     });
 }
 
-async function handleCreateCategoria() {
-    const nombre = prompt("Nombre de la nueva categoría:");
-    if (!nombre) return;
-
-    const presupuestoStr = prompt("Monto del presupuesto mensual:");
-    if (!presupuestoStr) return;
-
-    const monto = parseFloat(presupuestoStr);
-    if (isNaN(monto) || monto < 0) {
-        alert("Monto inválido");
-        return;
+function openCategoriaModal(catEditar = null) {
+    if (catEditar) {
+        elements.categoriaId.value = catEditar.id;
+        elements.catNombre.value = catEditar.nombre;
+        elements.catPresupuesto.value = catEditar.montoPresupuesto;
+        document.getElementById('tituloModalCategoria').textContent = "Editar Categoría";
+    } else {
+        elements.formularioCategoria.reset();
+        elements.categoriaId.value = '';
+        document.getElementById('tituloModalCategoria').textContent = "Nueva Categoría";
     }
+    openModal(elements.modalCategoria);
+}
+
+async function handleCategoriaSubmit(e) {
+    e.preventDefault();
+
+    const nombre = elements.catNombre.value;
+    const monto = parseFloat(elements.catPresupuesto.value);
+    const id = elements.categoriaId.value;
+
+    const url = id ? API.categorias.byId(id) : API.categorias.base;
+    const method = id ? 'PUT' : 'POST';
+    const body = { nombre, montoPresupuesto: monto };
+    if (id) body.id = id;
 
     try {
-        const response = await fetch(API.categorias.base, {
-            method: 'POST',
+        const response = await fetch(url, {
+            method: method,
             headers: getAuthHeaders(),
-            body: JSON.stringify({ nombre, montoPresupuesto: monto })
+            body: JSON.stringify(body)
         });
 
         if (response.ok) {
+            closeModal(elements.modalCategoria);
+            if (id) closeModal(elements.modalDetalleGenerico); // Si veníamos de edición
             initDashboard();
         } else {
-            const msg = await response.text();
-            alert("Error: " + msg);
+            alert("Error: " + await response.text());
         }
     } catch (error) {
-        alert("Error de conexión");
+        alert(error);
     }
 }
 

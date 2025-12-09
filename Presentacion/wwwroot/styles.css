@@ -1,6 +1,332 @@
-﻿body {
+﻿:root {
+    --color-bg-body: #e8f5e9; /* Verde pastel muy claro */
+    --color-primary: #255d27; /* Verde oscuro */
+    --color-primary-hover: #1b5e20; /* Verde más oscuro para hovers */
+    --color-white: #ffffff;
+    --color-text-dark: #333333;
+    --color-border: #c8e6c9;
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-bg-body);
+    color: var(--color-text-dark);
+    line-height: 1.5;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .hidden {
     display: none !important;
 }
+
+h1, h2, h3, h4 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-family: inherit;
+}
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+    }
+
+
+#encabezadoPrincipal {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-soft);
+}
+
+    #encabezadoPrincipal h1 {
+        color: var(--color-white);
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+#navegacionPrincipal ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+
+#navegacionPrincipal button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
+}
+
+    #navegacionPrincipal button:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.login-form {
+    background-color: var(--color-white);
+    padding: 2.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+#btnAuthAction {
+    width: 100%;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    margin-top: 10px;
+}
+
+    #btnAuthAction:hover {
+        background-color: var(--color-primary-hover);
+    }
+
+
+#contenedorDashboard {
+    display: grid;
+
+    grid-template-columns: 30% 1fr;
+
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+}
+
+
+    #contenedorDashboard > aside,
+    #contenedorDashboard > div,
+    #seccionGastos,
+    #seccionCategorias {
+        background-color: var(--color-white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-soft);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+
+#barraLateralPresupuesto {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#seccionCategorias {
+    grid-column: 1;
+    grid-row: 2;
+    overflow-y: auto;
+}
+
+
+#contenidoPrincipal {
+    grid-column: 2;
+    grid-row: 1 / -1; 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+#seccionGastos {
+    height: 100%;
+    overflow: hidden; 
+}
+
+
+.encabezado-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-bg-body);
+}
+
+    .encabezado-seccion button,
+    .acciones-rapidas button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-size: 0.9rem;
+    }
+
+        .encabezado-seccion button:hover,
+        .acciones-rapidas button:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+
+meter {
+    width: 100%;
+    height: 25px;
+    margin: 10px 0;
+}
+
+    meter::-webkit-meter-optimum-value {
+        background: var(--color-primary);
+    }
+
+.detalles-presupuesto p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.contenedor-tabla {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#tablaGastos {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    #tablaGastos th, #tablaGastos td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #tablaGastos th {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        position: sticky;
+        top: 0;
+    }
+
+
+    #tablaGastos tbody tr:nth-child(even) {
+        background-color: #f1f8e9;
+    }
+
+    #tablaGastos tbody tr:hover {
+        background-color: #dcedc8;
+    }
+
+
+.btn-accion-tabla {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+
+dialog.modal {
+    margin: auto;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 500px;
+    background: var(--color-white);
+}
+
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+
+.contenido-modal header {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .contenido-modal header h3 {
+        color: var(--color-white);
+        margin: 0;
+    }
+
+.btnCerrarModal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0;
+    line-height: 1;
+}
+
+    .btnCerrarModal:hover {
+        background: none;
+        color: #ffcdd2;
+        transform: scale(1.1);
+    }
+
+.contenido-modal form,
+.contenido-modal .cuerpo-modal {
+    padding: 20px;
+}
+
+
+.acciones-formulario, .acciones-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    .acciones-formulario button,
+    .acciones-modal button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+    }
+
+.boton-peligro {
+    background-color: #d32f2f !important;
+}
+
+    .boton-peligro:hover {
+        background-color: #b71c1c !important;
+    }

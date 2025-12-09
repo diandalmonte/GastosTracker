@@ -25,6 +25,7 @@ namespace Aplicacion.Servicios.Mappers
         {
             return new Usuario
             {
+                Id = dto.Id,
                 Nombre = dto.Nombre,
                 Email = dto.Email,
                 PasswordHash = dto.Password
