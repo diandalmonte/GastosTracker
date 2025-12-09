@@ -8,6 +8,6 @@ namespace Aplicacion.Interfaces.AplicacionServices
 {
     public interface IAuthService
     {
-        public string Login(string email, string password);
+        public Task<string> Login(string email, string password);
     }
 }

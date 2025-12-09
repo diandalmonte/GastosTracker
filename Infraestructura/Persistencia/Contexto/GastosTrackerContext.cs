@@ -19,6 +19,5 @@ namespace Infraestructura.Persistencia.Contexto
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<MetodoDePago> MetodosDePago { get; set; }
-        public DbSet<Presupuesto> Presupuestos { get; set; }
     }
 }

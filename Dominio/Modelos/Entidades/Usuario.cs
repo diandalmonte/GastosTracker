@@ -11,6 +11,7 @@ namespace Dominio.Modelos.Entidades
     {
         public string Nombre { get; set; }
         public string Email { get; set; }
+        public decimal Presupuesto { get; set; }
         public ICollection<Categoria> Categorias { get; set; } = [];
         public ICollection<MetodoDePago> MetodosDePago { get; set; } = [];
         public ICollection<Gasto> Gastos { get; set; } = [];

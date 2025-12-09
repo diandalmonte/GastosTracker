@@ -8,33 +8,30 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dominio.Modelos.Entidades
 {
-    public class Categoria : EntidadBase
+    public class Categoria : EntidadBase, IEntidadDeUsuario
     {
         public string Nombre { get; set; }
-        public Guid PresupuestoId { get; set; }
-
-        [ForeignKey("PresupuestoId")]
-        public Presupuesto? Presupuesto { get; set; }
+        public decimal Presupuesto { get; set; }
         public Guid UsuarioId { get; set; }
 
         [ForeignKey("UsuarioId")]
         public Usuario? Usuario { get; set; }//PORQUE porque null
 
-        public Categoria(string nombre, Guid presupuestoId, Guid usuarioId)
+        public Categoria(string nombre, decimal presupuesto, Guid usuarioId)
         {
             Nombre = nombre;
-            PresupuestoId = presupuestoId;
+            Presupuesto = presupuesto;
             UsuarioId = usuarioId;
         }
 
         public bool IsPresupuestoExcedido(decimal montoGastos)
         {
-            return (Presupuesto?.MontoLimite < montoGastos);
+            return (Presupuesto < montoGastos);
         }
 
         public decimal? GetDiferenciaPresupuesto(decimal montoGastos)
         {
-            return (Presupuesto?.MontoLimite - montoGastos);
+            return (Presupuesto - montoGastos);
         }
     }
 }

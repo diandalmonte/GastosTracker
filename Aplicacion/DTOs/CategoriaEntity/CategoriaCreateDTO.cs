@@ -9,7 +9,7 @@ namespace Aplicacion.DTOs.CategoriaEntity
 {
     public class CategoriaCreateDTO
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Nombre { get; set; }
         public decimal MontoPresupuesto { get; set; }
         public Guid UsuarioId { get; set; }

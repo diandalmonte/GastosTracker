@@ -4,7 +4,7 @@ using Dominio.Exceptions;
 
 namespace Dominio.Modelos.Entidades
 {
-    public class Gasto : EntidadBase //Does use of required make sense here?
+    public class Gasto : EntidadBase, IEntidadDeUsuario
     {
         public string Encabezado { get; set; }
         public decimal Monto { get; private set; } //CAMBIAR: Validar que esto sea solo positivo

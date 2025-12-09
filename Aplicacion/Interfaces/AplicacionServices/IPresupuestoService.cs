@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aplicacion.DTOs.CategoriaEntity;
+using Dominio.Modelos.Entidades;
 
 namespace Aplicacion.Interfaces.AplicacionServices
 {
     public interface IPresupuestoService
     {
-        //No tiene crud?? presupuestos se manejan a traves de Categoria y Usuario?
-        //En caso de ser asi, implementar aqui logica de Avisos y calulos
+        List<CategoriaReadDTO> ObtenerCategoriasExcedidas(Guid idUsuario);
+        string ProcesarGasto(Gasto gasto);
+        decimal ObtenerDiferencia(Guid idUsuario);
+
     }
 }

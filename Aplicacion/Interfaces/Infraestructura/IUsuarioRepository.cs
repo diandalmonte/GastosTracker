@@ -10,6 +10,11 @@ namespace Aplicacion.Interfaces.Infraestructura
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario?> ObtenerPorEmail(string email);
+        Task<Usuario?> ObtenerPorId(Guid id);
+        Task Guardar(Usuario usuario);
+        Task Actualizar(Usuario usuario);
+        Task Eliminar(Guid id);
+        bool EmailExiste(string email);
+        Task<Usuario> ObtenerPorEmail(string email);
     }
 }

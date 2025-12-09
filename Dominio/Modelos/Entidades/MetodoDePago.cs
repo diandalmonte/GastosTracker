@@ -9,7 +9,7 @@ using Dominio.Modelos.Enums;
 
 namespace Dominio.Modelos.Entidades
 {
-    public class MetodoDePago : EntidadBase
+    public class MetodoDePago : EntidadBase, IEntidadDeUsuario
     {
         public TipoPago TipoDePago { get; set; }
         public string Nombre { get; set; }

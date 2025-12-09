@@ -1,4 +1,5 @@
 ﻿using Aplicacion.Interfaces.AplicacionServices;
+using Aplicacion.Exceptions;
 using Aplicacion.DTOs.UsuarioEntity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace Presentación.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UsuarioCreateDTO dto)
+        public IActionResult Register(UsuarioRequestDTO dto)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace Presentación.Controllers
                 var token = _authService.Login(dto.Email, password);
                 return Ok(new { token });
             }
-            catch (EmailAlreadyInUse ex)
+            catch (EmailAlreadyInUseException ex)
             {
                 return Conflict(ex.Message);
             }

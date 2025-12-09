@@ -10,10 +10,11 @@ namespace Dominio.Servicios
     public interface IPresupuestoManager
     {
         public List<string> ValidarPresupuesto(
+            Categoria categoria,
             decimal montoGastoNuevo, 
-            Presupuesto presupuestoCategoria, 
+            decimal presupuestoCategoria, 
             decimal gastosEnCategoria,
-            Presupuesto presupuestoGeneral,
+            decimal presupuestoGeneral,
             decimal gastosGenerales);
     }
 }

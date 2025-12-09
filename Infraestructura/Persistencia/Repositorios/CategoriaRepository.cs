@@ -15,13 +15,13 @@ namespace Infraestructura.Persistencia.Repositorios
     {
         public CategoriaRepository(GastosTrackerContext context) : base(context) { }
 
-        public async Task<IEnumerable<Categoria>> ObtenerPorFiltro(string filtro)
+        public async Task<IEnumerable<Categoria>> ObtenerPorFiltro(string filtro, Guid idUsuario)
         {
             var query = _dbSet.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filtro))
             {
-                query = query.Where(c => c.Nombre.Contains(filtro));
+                query = query.Where(c => c.UsuarioId == idUsuario && c.Nombre.Contains(filtro));
             }
 
             return await query.ToListAsync();

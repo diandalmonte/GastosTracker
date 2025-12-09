@@ -20,14 +20,12 @@ namespace Aplicacion.Servicios.Mappers
                 Monto = ent.Monto,
                 Fecha = ent.Fecha,
                 Descripcion = ent.Descripcion,
-                // Navegamos a las propiedades compuestas. 
-                // Usamos '?' y '??' para evitar excepciones si Categoria/Metodo es null
                 NombreCategoria = ent.Categoria?.Nombre ?? "Sin Categoría",
                 MetodoDePago = ent.MetodoDePago?.Nombre ?? "Desconocido"
             };
         }
 
-        // Método extra para la vista previa (no parte de la interfaz genérica, pero útil)
+        // Metodo extra para la vista previa
         public static GastoVistaPrevia MapVistaPrevia(Gasto ent)
         {
             return new GastoVistaPrevia

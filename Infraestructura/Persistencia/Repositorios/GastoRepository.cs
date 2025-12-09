@@ -27,17 +27,17 @@ namespace Infraestructura.Persistencia.Repositorios
         }
 
 
-        public async Task<Gasto?> ObtenerPorId(Guid id)
+        public async Task<Gasto?> ObtenerPorId(Guid id, Guid idUsuario)
         {
-            return await _context.Gastos
+            return await _context.Gastos.Where(g => g.UsuarioId == idUsuario)
                 .Include(g => g.Categoria) // Incluí categoria para facilitar proceso de Mapping a DTOs
                 .AsNoTracking()
                 .FirstOrDefaultAsync(g => g.Id == id);
         }
 
-        public async Task<IEnumerable<Gasto>> Obtener()
+        public async Task<IEnumerable<Gasto>> Obtener(Guid idUsuario)
         {
-            return await _context.Gastos
+            return await _context.Gastos.Where(g => g.UsuarioId == idUsuario)
                 .Include(g => g.Categoria) // Aqui tambien se incluye Categoria
                 .AsNoTracking()
                 .ToListAsync();
@@ -51,10 +51,10 @@ namespace Infraestructura.Persistencia.Repositorios
         }
 
 
-        public async Task Eliminar(Guid id)
+        public async Task Eliminar(Guid id, Guid idUsuario)
         {
             // Aqui se busca directamente con FindAsync para evitar el .Include Categoria que realiza ObtenerPorId() (es mas rapido)
-            var gasto = await _context.Gastos.FindAsync(id);
+            var gasto = await _context.Gastos.FirstOrDefaultAsync(g => g.Id == id && g.UsuarioId == idUsuario);
 
             if (gasto != null)
             {
@@ -64,9 +64,9 @@ namespace Infraestructura.Persistencia.Repositorios
         }
 
 
-        public async Task<IEnumerable<Gasto>> ObtenerPorFiltro(GastoFilter filtro)
+        public async Task<IEnumerable<Gasto>> ObtenerPorFiltro(GastoFilter filtro, Guid idUsuario)
         {
-            var query = _context.Gastos
+            var query = _context.Gastos.Where(g => g.UsuarioId == idUsuario)
                 .Include(g => g.Categoria)
                 .AsNoTracking()
                 .AsQueryable(); //Uso de IQueryable para poder aplicar todas las consultas LINQ en forma de cascada

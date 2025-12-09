@@ -17,16 +17,15 @@ namespace Aplicacion.Servicios.Mappers
             {
                 Id = ent.Id,
                 Nombre = ent.Nombre,
-                MontoPresupuesto = ent.Presupuesto?.MontoLimite,
+                MontoPresupuesto = ent.Presupuesto,
                 PorcentajePresupuesto = null,
                 IsExcedido = false
             };
         }
 
         public Categoria MapEntity(CategoriaCreateDTO dto)
-        {
-            //El presupuestoId se agrega en CategoriaService, por lo que aqui solo se creara con ese campo vacio.
-            return new Categoria(dto.Nombre, Guid.Empty, dto.UsuarioId);
+        { 
+            return new Categoria(dto.Nombre, dto.MontoPresupuesto, dto.UsuarioId);
         }
     }
 }
