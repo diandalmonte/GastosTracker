@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(GastosTrackerContext))]
-    [Migration("20251208044815_InitialModelV2")]
-    partial class InitialModelV2
+    [Migration("20251209180716_InitialModelV4")]
+    partial class InitialModelV4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,16 +38,13 @@ namespace Infraestructura.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PresupuestoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("Presupuesto")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UsuarioId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PresupuestoId")
-                        .IsUnique();
 
                     b.HasIndex("UsuarioId");
 
@@ -66,8 +63,12 @@ namespace Infraestructura.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Encabezado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -118,31 +119,6 @@ namespace Infraestructura.Migrations
                     b.ToTable("MetodosDePago");
                 });
 
-            modelBuilder.Entity("Dominio.Modelos.Entidades.Presupuesto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CategoriaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("MontoLimite")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Presupuestos");
-                });
-
             modelBuilder.Entity("Dominio.Modelos.Entidades.Usuario", b =>
                 {
                     b.Property<Guid>("Id")
@@ -164,6 +140,9 @@ namespace Infraestructura.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Presupuesto")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
@@ -171,19 +150,11 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("Dominio.Modelos.Entidades.Categoria", b =>
                 {
-                    b.HasOne("Dominio.Modelos.Entidades.Presupuesto", "Presupuesto")
-                        .WithOne("Categoria")
-                        .HasForeignKey("Dominio.Modelos.Entidades.Categoria", "PresupuestoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Dominio.Modelos.Entidades.Usuario", "Usuario")
                         .WithMany("Categorias")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Presupuesto");
 
                     b.Navigation("Usuario");
                 });
@@ -224,22 +195,6 @@ namespace Infraestructura.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Dominio.Modelos.Entidades.Presupuesto", b =>
-                {
-                    b.HasOne("Dominio.Modelos.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Dominio.Modelos.Entidades.Presupuesto", b =>
-                {
-                    b.Navigation("Categoria");
                 });
 
             modelBuilder.Entity("Dominio.Modelos.Entidades.Usuario", b =>

@@ -11,7 +11,7 @@ namespace Aplicacion.Interfaces.AplicacionServices
     public interface IGastoService
     {
         public Task<List<string>> Guardar(GastoCreateDTO dto, bool isImported);
-        public Task<List<Gasto>> Obtener(Guid idUsuario);
+        public Task<List<GastoVistaPrevia>> Obtener(Guid idUsuario);
         public Task<PagedResult> ObtenerVistasPrevias(Guid idUsuario); //Obtener paginadas? (Por fecha?)
         public Task<GastoReadDTO> ObtenerPorId(Guid id, Guid idUsuario);
         public void Actualizar(GastoCreateDTO dto);

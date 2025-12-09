@@ -21,21 +21,18 @@ namespace Aplicacion.Servicios
         private readonly IUsuarioRepository _repoUsuarios;
         private readonly IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> _mapper;
         private readonly IPresupuestoManager _presupuestoManager;
-        private readonly ICategoriaService _categoriaService;
 
 
         public PresupuestoService(IFiltrableRepository<Categoria, string> repoCategoria,
             IFiltrableRepository<Gasto, GastoFilter> repoGastos, IUsuarioRepository repoUsuarios, 
             IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> mapper,
-            IPresupuestoManager presupuestoManager,
-            ICategoriaService categoriaService)
+            IPresupuestoManager presupuestoManager)
         {
             _repoCategoria = repoCategoria;
             _repoGastos = repoGastos;
             _repoUsuarios = repoUsuarios;
             _mapper = mapper;
             _presupuestoManager = presupuestoManager;
-            _categoriaService = categoriaService;
         }
 
         public async Task<List<CategoriaReadDTO>> ObtenerCategoriasProcesadas(Guid idUsuario)

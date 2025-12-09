@@ -81,8 +81,9 @@ namespace Aplicacion.Servicios
 
         public async Task<PagedResult> ObtenerVistasPrevias(Guid idUsuario)
         {
-            IEnumerable<Gasto> gastosFiltrados = await _repo.Obtener(idUsuario);
-            /*PagedResult pagedResultGastos;
+            throw new NotImplementedException();
+            /*IEnumerable<Gasto> gastosFiltrados = await _repo.Obtener(idUsuario);
+            PagedResult pagedResultGastos;
             return pagedResultGastos;*/
         }
 
