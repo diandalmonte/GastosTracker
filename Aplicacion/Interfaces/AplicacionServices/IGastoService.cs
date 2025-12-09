@@ -10,7 +10,7 @@ namespace Aplicacion.Interfaces.AplicacionServices
 {
     public interface IGastoService
     {
-        public void Guardar(GastoCreateDTO dto);
+        public Task<List<string>> Guardar(GastoCreateDTO dto, bool isImported);
         public Task<PagedResult> ObtenerVistasPrevias(Guid idUsuario); //Obtener paginadas? (Por fecha?)
         public Task<GastoReadDTO> ObtenerPorId(Guid id, Guid idUsuario);
         public void Actualizar(GastoCreateDTO dto);

@@ -38,9 +38,41 @@ namespace Aplicacion.Servicios
             _categoriaService = categoriaService;
         }
 
-        public async Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario)//Bien
+        public async Task<List<CategoriaReadDTO>> ObtenerCategoriasProcesadas(Guid idUsuario)
         {
-            IEnumerable<CategoriaReadDTO> todasLasCategorias = await _categoriaService.Obtener(idUsuario);
+            var categorias = await _repoCategoria.Obtener(idUsuario);
+            List<CategoriaReadDTO> listaDTOs = [];
+
+            //Se calcula el rango del mes actual
+            var (inicioMes, finMes) = DateExtensions.ObtenerRangoMesActual();
+
+            //La logica siguiente es para poder brindar informacion extra a la UI
+            foreach (var categoria in categorias)
+            {
+                var gastos = await _repoGastos.ObtenerPorFiltro(new GastoFilter
+                {
+                    FechaInicio = inicioMes,
+                    FechaFin = finMes,
+                    CategoriaId = categoria.Id
+                }, idUsuario);
+
+                decimal totalGastado = gastos.Sum(g => g.Monto);
+
+                var dto = _mapper.MapDTO(categoria);
+
+                //Añadiendo esto al dto, ya que el Mapper no lo puede calcular/validar solo
+                dto.IsExcedido = totalGastado > categoria.Presupuesto;
+
+                dto.PorcentajePresupuesto = (int) await ObtenerPorcentajeCategoria(categoria, idUsuario);
+
+                listaDTOs.Add(dto);
+            }
+
+            return listaDTOs;
+        }
+        public async Task<List<CategoriaReadDTO>> ObtenerCategoriasExcedidas(Guid idUsuario)
+        {
+            IEnumerable<CategoriaReadDTO> todasLasCategorias = await ObtenerCategoriasProcesadas(idUsuario);
 
             //Filtramos las que esten excedidas
             return todasLasCategorias
@@ -48,7 +80,7 @@ namespace Aplicacion.Servicios
                     .ToList();
         }
 
-        public async Task<decimal> ObtenerDiferenciaGeneral(Guid idUsuario)//Bien
+        public async Task<decimal> ObtenerDiferenciaGeneral(Guid idUsuario)
         {
             decimal presupuestoGeneral = await ObtenerPresupuestoGeneral(idUsuario);
 
@@ -64,7 +96,7 @@ namespace Aplicacion.Servicios
 
             return presupuestoGeneral - totalGastado;
         }
-        public async Task<decimal> ObtenerPorcentajeCategoria(Categoria categoria, Guid idUsuario) //bien
+        private async Task<decimal> ObtenerPorcentajeCategoria(Categoria categoria, Guid idUsuario)
         {
             if (categoria.Presupuesto == 0) return 0;
 
@@ -82,7 +114,7 @@ namespace Aplicacion.Servicios
             return (totalGastado / categoria.Presupuesto) * 100;
         }
 
-        public async Task<List<string>> ProcesarGasto(Gasto gasto) //Bien
+        public async Task<List<string>> ProcesarGasto(GastoCreateDTO gasto)
         {
             var categoria = await _repoCategoria.ObtenerPorId(gasto.CategoriaId, gasto.UsuarioId);
 
@@ -91,10 +123,20 @@ namespace Aplicacion.Servicios
 
             decimal presupuestoGeneral = await ObtenerPresupuestoGeneral(gasto.UsuarioId);
 
-            //Se saca el rango basandose en la fecha del gasto:
-            var fechaGasto = gasto.Fecha;
-            var inicioMes = new DateOnly(fechaGasto.Year, fechaGasto.Month, 1);
-            var finMes = inicioMes.AddMonths(1).AddDays(-1);
+            DateOnly inicioMes, finMes;
+            if (gasto.Fecha.HasValue)
+            {
+ 
+                var fechaReal = gasto.Fecha.Value;
+
+                inicioMes = new DateOnly(fechaReal.Year, fechaReal.Month, 1);
+                finMes = inicioMes.AddMonths(1).AddDays(-1);
+
+            }
+            else
+            {
+                throw new ModelConstructionException($"Gasto: {gasto.Encabezado} sin fecha");
+            }
 
             var gastosCatList = await _repoGastos.ObtenerPorFiltro(new GastoFilter
             {

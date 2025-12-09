@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aplicacion.DTOs.CategoriaEntity;
 using Aplicacion.DTOs.GastoEntity;
-using Aplicacion.Interfaces.AplicacionServices;
 using Aplicacion.Exceptions;
-using AutoMapper;
+using Aplicacion.Interfaces.AplicacionServices;
 using Aplicacion.Interfaces.Infraestructura;
-using Dominio.Modelos.Entidades;
 using Aplicacion.Servicios.Mappers;
+using AutoMapper;
+using Dominio.Modelos.Entidades;
 
 namespace Aplicacion.Servicios
 {
@@ -17,14 +18,19 @@ namespace Aplicacion.Servicios
     {
         private readonly IFiltrableRepository<Gasto, GastoFilter> _repo;
         private readonly IMapperService<Gasto, GastoCreateDTO, GastoReadDTO> _mapper;
+        private readonly IPresupuestoService _presupuestoService;
 
-        public GastoService(IFiltrableRepository<Gasto, GastoFilter> repo, IMapperService<Gasto, GastoCreateDTO, GastoReadDTO> mapper)
+        public GastoService(IFiltrableRepository<Gasto, GastoFilter> repo, IMapperService<Gasto, GastoCreateDTO, GastoReadDTO> mapper,
+            IPresupuestoService presupuestoService)
         {
             _repo = repo;
             _mapper = mapper;
+            _presupuestoService = presupuestoService;
         }
-        public void Guardar(GastoCreateDTO cDto)
+        public async Task<List<string>> Guardar(GastoCreateDTO cDto, bool isImported)
         {
+            List<string> alertas;
+
             if (cDto.IsFechaActual)
             {
                 cDto.Fecha = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -34,7 +40,18 @@ namespace Aplicacion.Servicios
                 throw new ModelConstructionException("Error en la asignacion de fecha para Gasto");
             }
 
-            _repo.Guardar(_mapper.MapEntity(cDto));
+            if (!isImported)
+            {
+                alertas = await _presupuestoService.ProcesarGasto(cDto);
+                await _repo.Guardar(_mapper.MapEntity(cDto));
+                return alertas;
+            }
+            else
+            {
+                return [];
+            }
+
+            
 
         }
 

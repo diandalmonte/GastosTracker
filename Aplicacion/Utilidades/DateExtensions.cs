@@ -17,7 +17,7 @@ namespace Aplicacion.Utilidades
             return (inicio, fin);
         }
 
-        public static (DateOnly Inicio, DateOnly Fin) ObtenerRangoMesPasado(this DateTime fechaBase)
+        public static (DateOnly Inicio, DateOnly Fin) ObtenerRangoMesPasado()
         {
             var fechaMesPasado = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-1);
             var inicio = new DateOnly(fechaMesPasado.Year, fechaMesPasado.Month, 1);

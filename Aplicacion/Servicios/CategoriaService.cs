@@ -16,6 +16,7 @@ namespace Aplicacion.Servicios
         private readonly IFiltrableRepository<Categoria, string> _repoCategoria;
         private readonly IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> _mapper;
         private readonly IFiltrableRepository<Gasto, GastoFilter> _repoGastos;
+        private readonly IPresupuestoService _presupuestoService;
 
         public CategoriaService(IFiltrableRepository<Categoria, string> repoCategorias,
             IMapperService<Categoria, CategoriaCreateDTO, CategoriaReadDTO> mapper,
@@ -25,6 +26,7 @@ namespace Aplicacion.Servicios
             _repoCategoria = repoCategorias;
             _mapper = mapper;
             _repoGastos = repoGastos;
+            _presupuestoService = presupuestoService;
         }
 
         public void Guardar(CategoriaCreateDTO dto)
@@ -36,43 +38,7 @@ namespace Aplicacion.Servicios
 
         public async Task<IEnumerable<CategoriaReadDTO>> Obtener(Guid idUsuario)
         {
-
-            var categorias = await _repoCategoria.Obtener(idUsuario);
-            List<CategoriaReadDTO> listaDTOs = [];
-
-            //Se calcula el rango del mes actual
-            var (inicioMes, finMes) = DateExtensions.ObtenerRangoMesActual();
-
-            //La logica siguiente es para poder brindar informacion extra a la UI
-            foreach (var categoria in categorias)
-            {
-                var gastos = await _repoGastos.ObtenerPorFiltro(new GastoFilter 
-                { 
-                    FechaInicio = inicioMes, 
-                    FechaFin = finMes, 
-                    CategoriaId = categoria.Id 
-                }, idUsuario);
-
-                decimal totalGastado = gastos.Sum(g => g.Monto);
-            
-                var dto = _mapper.MapDTO(categoria);
-
-                //Añadiendo esto al dto, ya que el Mapper no lo puede calcular/validar solo
-                dto.IsExcedido = totalGastado > categoria.Presupuesto;
-            
-                if (categoria.Presupuesto > 0)
-                {
-                    dto.PorcentajePresupuesto = (int)((totalGastado / categoria.Presupuesto) * 100);
-                }
-                else 
-                {
-                    dto.PorcentajePresupuesto = 0;
-                }
-
-                listaDTOs.Add(dto);
-            }
-
-            return listaDTOs;
+            return await _presupuestoService.ObtenerCategoriasProcesadas(idUsuario);
         }
 
         public async Task<CategoriaReadDTO> ObtenerPorId(Guid id, Guid idUsuario)

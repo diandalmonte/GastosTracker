@@ -7,7 +7,7 @@ using Aplicacion.Interfaces.Infraestructura;
 
 namespace Infraestructura.Exportacion
 {
-    public class ReporteExporterFactory
+    public class ReporteExporterFactory : IExporterFactory
     {
         private readonly IEnumerable<IReporteExporter> _exporters;
 
