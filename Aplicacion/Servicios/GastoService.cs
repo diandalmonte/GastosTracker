@@ -54,6 +54,12 @@ namespace Aplicacion.Servicios
             
 
         }
+        public async Task<List<GastoVistaPrevia>> Obtener(Guid idUsuario)
+        {
+            var gastos = await _repo.Obtener(idUsuario);
+            return gastos.Select(g => GastoMapper.MapVistaPrevia(g)).ToList();
+            
+        }
 
         public async Task<IEnumerable<GastoVistaPrevia>> ObtenerPorFiltro(GastoFilter filtro, Guid idUsuario)
         {

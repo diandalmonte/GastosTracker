@@ -36,7 +36,7 @@ namespace Presentacion.Controllers
             {
                 var idUsuario = GetLoggedUserId();
 
-                var gastos = _gastoService.ObtenerVistasPrevias(idUsuario);
+                var gastos = _gastoService.Obtener(idUsuario);
                 return Ok(gastos);
             }
             catch (Exception ex)

@@ -11,6 +11,7 @@ namespace Aplicacion.Interfaces.Infraestructura
     public interface IUsuarioRepository
     {
         Task<Usuario?> ObtenerPorId(Guid id);
+        Task<List<Usuario>> Obtener(Guid id);
         Task Guardar(Usuario usuario);
         Task Actualizar(Usuario usuario);
         Task Eliminar(Guid id);
